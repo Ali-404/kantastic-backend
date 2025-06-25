@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  
 }
 
 datasource db {
@@ -8,17 +9,18 @@ datasource db {
 }
 
 model User {
-  id                 Int           @id @default(autoincrement())
-  username           String @unique
-  email              String @unique
-  password           String 
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  tasks              Task[]        @relation("UserTasks")
-  createdProjects    Project[]     @relation("CreatedProjects")
+  id                 Int            @id @default(autoincrement())
+  username           String         @unique
+  email              String         @unique
+  password           String
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  tasks              Task[]         @relation("UserTasks")
+  createdProjects    Project[]      @relation("CreatedProjects")
   userProjects       UserProject[]
-  assignments        Assignment[]  @relation("UserAssignments")
-  createdAssignments Assignment[]  @relation("AssignedTo")
+  assignments        Assignment[]   @relation("UserAssignments")
+  createdAssignments Assignment[]   @relation("AssignedTo")
+  notifications      Notification[] @relation("UserNotification")
 }
 
 model Task {
@@ -69,4 +71,20 @@ model Assignment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id            Int              @id @default(autoincrement())
+  type          NotificationType @default(INFO)
+  content       String
+  notifiable_id Int
+  notifiable    User             @relation("UserNotification", fields: [notifiable_id], references: [id])
+  read Boolean @default(false)
+}
+
+enum NotificationType {
+  INFO
+  ERROR
+  WARNING
+  SUCCESS
 }

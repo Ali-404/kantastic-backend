@@ -3,9 +3,33 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { NotificationsModule } from './notifications/notifications.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { join } from 'path';
 
 @Module({
   imports: [
+
+    MailerModule.forRoot({
+        transport: {
+          host: "localhost",
+          port: 1025,
+          ignoreTLS: true,
+        },
+        defaults: {
+          from: '"Dev Server" <noreply@localhost>',
+      },
+      template: {
+        dir: join(__dirname, 'emails'), 
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
+
+
     JwtModule.register({
         global: true,
         secret: process.env.JWT_SECRET,
@@ -13,6 +37,6 @@ import { JwtModule } from '@nestjs/jwt';
           expiresIn: "1h"
         }
     }),
-    PrismaModule, UsersModule, AuthModule],
+    PrismaModule, UsersModule, AuthModule, NotificationsModule],
 })
 export class AppModule {}
