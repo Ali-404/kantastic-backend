@@ -1,4 +1,4 @@
-import {  BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {  BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
@@ -9,7 +9,7 @@ type IAuthData = {
     password: string
 }
 
-type IJWTPayload = {
+export type IJWTPayload = {
     username: string,
     sub: number
 }
@@ -70,6 +70,14 @@ export class AuthService {
             user
         }
 
+    }
+
+    async user(username: string){
+        const _user =  await this._usersService.findUserByUsername(username)
+        if (!_user){
+            throw new NotFoundException("Something went wrong !")
+        }
+        return _user
     }
 
 

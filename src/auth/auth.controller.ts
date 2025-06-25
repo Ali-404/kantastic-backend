@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import SignInDTO from './dto/signin.dto';
-import { AuthService } from './auth.service';
+import { AuthService, IJWTPayload } from './auth.service';
 import SignUpDTO from './dto/signup.dto';
 import AuthGuard from './guards/auth.guard';
 
@@ -26,6 +26,14 @@ export class AuthController {
             message: "See you later !"
         }
     }
+
+
+    @UseGuards(AuthGuard)
+    @Get("user")
+    user(@Req() req: Request){
+        const username = (req["user"] as IJWTPayload).username   
+        return this._authService.user(username)
+    }   
     
     
 
