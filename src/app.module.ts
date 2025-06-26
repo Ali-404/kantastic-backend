@@ -18,7 +18,7 @@ import { join } from 'path';
           ignoreTLS: true,
         },
         defaults: {
-          from: '"Dev Server" <noreply@localhost>',
+          from: '"Kantastic" <noreply.kantastic@localhost>',
       },
       template: {
         dir: join(__dirname, 'emails'), 
@@ -34,7 +34,7 @@ import { join } from 'path';
         global: true,
         secret: process.env.JWT_SECRET,
         signOptions: {
-          expiresIn: "1h"
+          expiresIn: "3h"
         }
     }),
     PrismaModule, UsersModule, AuthModule, NotificationsModule],

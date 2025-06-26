@@ -12,5 +12,8 @@ export default class CreateNotificationDTO {
     @IsString()
     content: string 
 
+    
+    @IsNotEmpty()
+    notifiable_id: number
 
 }
