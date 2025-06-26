@@ -38,6 +38,7 @@ model Project {
   id           Int           @id @default(autoincrement())
   title        String
   description  String
+  cover       String?
   adminId      Int
   admin        User          @relation("CreatedProjects", fields: [adminId], references: [id])
   userProjects UserProject[]

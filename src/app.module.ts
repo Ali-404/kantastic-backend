@@ -7,6 +7,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -37,6 +38,6 @@ import { join } from 'path';
           expiresIn: "3h"
         }
     }),
-    PrismaModule, UsersModule, AuthModule, NotificationsModule],
+    PrismaModule, UsersModule, AuthModule, NotificationsModule, ProjectsModule],
 })
 export class AppModule {}
