@@ -1,12 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import CreateProjectDto from './dto/create-project.dto';
+import EditProjectDto from './dto/edit-project.dto';
 
 @Injectable()
 export class ProjectsService {
 
     constructor(private readonly _prisma: PrismaService) {}
 
+
+
+    getProjectAdmin(projectId: number) {
+        return this._prisma.project.findUnique({
+            where: { id: projectId },
+            select: { adminId: true,admin: true }
+        });
+    }
+
+
+    delete(id: number) {
+        this._prisma.project.delete({
+            where: {id}
+        });    
+        return {
+            message: "Project deleted successfully",
+        }
+    }
 
     findAll(userId: number) {
         return this._prisma.project.findMany({
@@ -68,6 +87,22 @@ export class ProjectsService {
                 _count: withCount,
             }
         });
+    }
+
+    async edit(id: number,dto: EditProjectDto){
+        const project = await this._prisma.project.update({
+            where: { id: id },
+            data: {
+                title: dto.title,
+                description: dto.description,
+            }
+        });
+         
+        return {
+            message: "Project updated successfully",
+            newData: dto,
+            project
+        }
     }
 
 

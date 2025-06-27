@@ -4,6 +4,7 @@ import { ProjectsService } from './projects.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join } from 'path';
+import EnsureProjectIsMineGuard from './guards/EnsureProjectIsMine.guard';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { join } from 'path';
     }),
   ],
   controllers: [ProjectsController],
-  providers: [ProjectsService]
+  providers: [ProjectsService, EnsureProjectIsMineGuard]
 })
 export class ProjectsModule {}

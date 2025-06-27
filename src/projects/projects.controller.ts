@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import AuthGuard from 'src/auth/guards/auth.guard';
 import { ProjectsService } from './projects.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import CreateProjectDto from './dto/create-project.dto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import EnsureProjectIsMineGuard from './guards/EnsureProjectIsMine.guard';
+import EditProjectDto from './dto/edit-project.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -49,21 +51,18 @@ export class ProjectsController {
     }
 
 
-    @UseGuards(AuthGuard)
-    @Get('edit/:id')
-    edit(){
+    @UseGuards(AuthGuard,EnsureProjectIsMineGuard)
+    @Put('edit/:id')
+    async edit(@Body() dto: EditProjectDto, @Param("id", ParseIntPipe) id: number) {
+        return await this._projectService.edit(id, dto);
     }
 
-    @UseGuards(AuthGuard)
-    @Get('delete/:id')
-    delete(){
-    
+    @UseGuards(AuthGuard, EnsureProjectIsMineGuard)
+    @Delete('delete/:id')
+    delete(@Param("id", ParseIntPipe) id: number) {
+        return this._projectService.delete(id);
     }
 
-    @UseGuards(AuthGuard)
-    @Post('restore/:')
-    restore(){
-    }
-
+ 
 
 }
