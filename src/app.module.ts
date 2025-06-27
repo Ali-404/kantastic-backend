@@ -6,9 +6,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { NotificationsModule } from './notifications/notifications.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { join } from 'path';
+import {  join } from 'path';
 import { ProjectsModule } from './projects/projects.module';
-
+import { MulterModule } from '@nestjs/platform-express';
+import {diskStorage} from 'multer'
 @Module({
   imports: [
 
@@ -29,6 +30,8 @@ import { ProjectsModule } from './projects/projects.module';
         },
       },
     }),
+
+  
 
 
     JwtModule.register({

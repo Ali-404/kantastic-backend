@@ -1,6 +1,10 @@
-import { Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import AuthGuard from 'src/auth/guards/auth.guard';
 import { ProjectsService } from './projects.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import CreateProjectDto from './dto/create-project.dto';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('projects')
 export class ProjectsController {
@@ -26,8 +30,22 @@ export class ProjectsController {
     }
 
     @UseGuards(AuthGuard)
-    @Get('create')
-    create(){
+    @UseInterceptors(FileInterceptor("cover", {
+        storage: diskStorage({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                cb(null, uniqueSuffix + extname(file.originalname));
+            }
+        })
+    }))
+    @Post('create')
+    async store(@Req() req: Request,@Body() dto:CreateProjectDto,@UploadedFile() cover: Express.Multer.File){
+        if (!cover){
+            throw new Error("test")
+        }
+        return await this._projectService.create(dto, req["user"].sub, cover);
+
     }
 
 

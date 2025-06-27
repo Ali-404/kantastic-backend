@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import CreateProjectDto from './dto/create-project.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -69,5 +70,21 @@ export class ProjectsService {
         });
     }
 
+
+    async create(dto: CreateProjectDto, userId: number, cover?: Express.Multer.File) {
+        const project = await this._prisma.project.create({data: {
+            title: dto.title,
+            description: dto.description,
+            adminId: userId,
+            cover: "/uploads/" + cover.filename,
+
+        }})
+
+
+        return {
+            message: "New Project created with success",
+            project
+        }
+    }
 
 }
