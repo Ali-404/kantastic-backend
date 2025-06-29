@@ -6,5 +6,8 @@ export class EmailService {
 
     constructor(private readonly _mailer: MailerService){}
     
+    // reset password
+
+    // confirm email
     
 }
