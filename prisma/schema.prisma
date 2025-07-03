@@ -63,8 +63,8 @@ model UserProject {
 
 model Assignment {
   id           Int  @id @default(autoincrement())
-  assignedById Int
-  assignedBy   User @relation("UserAssignments", fields: [assignedById], references: [id])
+  assignedById Int?
+  assignedBy   User? @relation("UserAssignments", fields: [assignedById], references: [id])
   taskId       Int
   task         Task @relation("TaskAssignments", fields: [taskId], references: [id])
   assignedToId Int

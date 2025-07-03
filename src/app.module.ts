@@ -8,6 +8,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import {  join } from 'path';
 import { ProjectsModule } from './projects/projects.module';
+import { TasksModule } from './tasks/tasks.module';
+import { AssignmentService } from './assignment/assignment.service';
+import { AssignmentModule } from './assignment/assignment.module';
 @Module({
   imports: [
 
@@ -39,6 +42,7 @@ import { ProjectsModule } from './projects/projects.module';
           expiresIn: "3h"
         }
     }),
-    PrismaModule, UsersModule, AuthModule, NotificationsModule, ProjectsModule],
+    PrismaModule, UsersModule, AuthModule, NotificationsModule, ProjectsModule, TasksModule, AssignmentModule],
+  providers: [AssignmentService],
 })
 export class AppModule {}
